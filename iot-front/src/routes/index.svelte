@@ -1,9 +1,16 @@
 <script>
       import { onMount } from 'svelte';
+      import Header from '$lib/Header.svelte';
+      import Footer from '$lib/Footer.svelte';
+      import Graph from  '$lib/Graph.svelte';
+      import Doughnut from '$lib/Doughnut.svelte';
+
       import Chart from 'chart.js/auto/auto.js';
 
+      let childGraph;
+      let childDoughnut;
+
       function TurnOnLed() {
-          console.log("Turn on led");
           fetch('http://localhost:5000/', {
             method: 'POST',
             headers: {
@@ -16,9 +23,13 @@
         return new Promise(resolve => setTimeout(resolve, ms));
       }
 
-      async function updateCharts(tempChart, humChart) {
+      async function updateCharts() {
         while (1) {
-            await sleep(1000);
+            if (childGraph == undefined || childDoughnut == undefined) {
+                await sleep(1000);
+                continue;
+            }
+
             var res = await fetch("http://localhost:5000/", {
                 method: 'GET',
                 headers: {
@@ -26,107 +37,28 @@
                 },
             }).then(res => res.json()); 
 
-            tempChart.data.labels.push(res.time);
-            tempChart.data.datasets.forEach((dataset) => {
-                dataset.data.push(res.temperature);
-            });
-
-            humChart.data.labels.push(res.time);
-            humChart.data.datasets.forEach((dataset) => {
-                dataset.data[0] = res.humidity;
-                dataset.data[1] = 100.0 - res.humidity;
-            });
-
-            tempChart.update();
-            humChart.update();
+            childGraph.updateValue(res.temperature);
+            childDoughnut.updateValue(res.humidity);
+            await sleep(2000);
         }
       }
 
-      let temperaturePortfolio;
-      let humidityPortfolio;
-
-      var temperatureData = {
-            labels: [],
-            datasets: [
-                {
-                    label: 'Dataset',
-                    data: [],
-                    borderColor: "#00FF00",
-                    backgroundColor: "#00FFFF"
-                }
-            ]
-        };
-        var temperatureConfig = {
-            type: 'line',
-            data: temperatureData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    title: {
-                        display: true,
-                        text: 'Temperature'
-                    }
-                }
-            }
-        };
-
-      var humidityData = {
-            labels: [],
-            datasets: [
-                {
-                    label: '',
-                    data: [50, 50],
-                    backgroundColor: [
-                        'rgb(255, 255, 255)',
-                        'rgb(0, 255, 0)'
-                    ],
-                    borderColor: [ "#FFFFFF", "#00FF00" ],
-                }
-            ]
-        };
-        var humidityConfig = {
-            type: 'doughnut',
-            data: humidityData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    title: {
-                        display: true,
-                        text: 'Humidity'
-                    }
-                }
-            }
-        };
-
-      onMount(async () => {
-        const temperatureCtx = temperaturePortfolio.getContext('2d');
-        const humidityCtx = humidityPortfolio.getContext('2d');
-
-        // Initialize chart using default config set
-        var temperatureChart = new Chart(temperatureCtx, temperatureConfig);
-        var humidityChart = new Chart(humidityCtx, humidityConfig);
-
-        await updateCharts(temperatureChart, humidityChart);
-      })
-
+      updateCharts();
 </script>
 
 <div class="main_div">
     <div class="header"> 
-        My small thermometer
+        <Header/>
     </div>
 
     <div class="graph_box">
-        <canvas bind:this={humidityPortfolio} class="graph"/>
-        <canvas bind:this={temperaturePortfolio} class="graph"/>
+        <div class="graph">
+            <Doughnut bind:this={childDoughnut}/>
+        </div>
+
+        <div class="graph">
+            <Graph bind:this={childGraph} minValue={0} maxValue={100} />
+        </div>
     </div>
 
     <div class="turn_on_box">
@@ -134,7 +66,7 @@
     </div>
 
     <div class="footer">
-        Made by Jean Sainctavit and Victor le-corre
+        <Footer/>
     </div>
 </div>
 
@@ -181,5 +113,4 @@
         max-height: 400px;
         background-color: white;
     }
-
 </style>
