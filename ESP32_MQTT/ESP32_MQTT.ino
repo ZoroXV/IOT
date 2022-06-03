@@ -6,7 +6,7 @@
 const char* ssid = "Viens on Ken";
 const char* password = "victor-wifi";
 
-const char* mqtt_server = "YOUR_MQTT_BROKER_IP_ADDRESS";
+const char* mqtt_server = "172.20.10.3";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -100,12 +100,15 @@ void loop() {
 	if (now - lastMsg > 5000) {
 		lastMsg = now;
 
-		char* tempString = String(dht.readTemperature());
+		temperature = dht.readTemperature();
+		char tempString[8];
+		dtostrf(temperature, 1, 2, tempString);
 		Serial.print("Temperature: ");
 		Serial.println(tempString);
 		client.publish("esp32/temp", tempString);
 
-		char* humString = String(dht.readHumidity());;
+		humidity = dht.readHumidity();
+		char humString[8];
 		dtostrf(humidity, 1, 2, humString);
 		Serial.print("Humidity: ");
 		Serial.println(humString);
