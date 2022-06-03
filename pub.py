@@ -4,28 +4,21 @@ import time
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Connected to broker")
-        global Connected                #Use global variable
-        Connected = True                #Signal connection 
+        global Connected
+        Connected = True
     else:
         print("Connection failed")
 
-Connected = False   #global variable for the state of the connection
+Connected = False
 
-#broker_address= "m11.cloudmqtt.com"
-#port = 12948
-#user = "yourUser"
-#password = "yourPassword"
-
-client = mqttClient.Client("PythonPub")               #create new instance
-#client.username_pw_set(user, password=password)    #set username and password
-client.on_connect= on_connect                      #attach function to callback
-#client.connect(broker_address, port=port)          #connect to broker
+client = mqttClient.Client("PythonPub")
+client.on_connect= on_connect
 
 client.connect('127.0.0.1', 1883)
 
-client.loop_start()        #start the loop
+client.loop_start()
 
-while Connected != True:    #Wait for connection
+while Connected != True:
     time.sleep(0.1)
 
 try:
