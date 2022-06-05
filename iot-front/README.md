@@ -1,17 +1,12 @@
 # create-svelte
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+## Deploying
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
+To create the associated docker image:
 
 ```bash
-# create a new project in the current directory
-npm init svelte
-
-# create a new project in my-app
-npm init svelte my-app
+docker build . -t iot-front
+docker run iot-front:latest
 ```
 
 ## Developing
