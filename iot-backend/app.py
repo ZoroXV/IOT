@@ -22,12 +22,13 @@ def get_random_stats():
     h = (100.0) * random.random()
     return (t, h)
 
+def turn_on_led_test():
+    print("Turn on led")
+
 def turn_on_led():
     requests.get("http://172.20.10.9/led")
 
-
 # Endpoints
-
 @app.route("/", methods=['GET'])
 def get_stats():
     # temperature, humidity = get_stats_from_esp32()
@@ -43,5 +44,5 @@ def get_stats():
 
 @app.route("/", methods=['POST'])
 def post_led():
-    turn_on_led()
+    turn_on_led_test()
     return ""
