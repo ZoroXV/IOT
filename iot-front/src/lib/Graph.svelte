@@ -1,29 +1,42 @@
 <script>
     import { onMount } from 'svelte';
     import Chart from 'chart.js/auto/auto.js';
+import { dataset_dev } from 'svelte/internal';
 
     export let minValue;
     export let maxValue;
 
     let portfolio;
     let chart;
+    let i = 0;
 
     export function updateValue(newValue) {
-        chart.data.labels.push(0);
-        chart.data.datasets.forEach((dataset) => {
-            dataset.data.push(newValue);
-        });
+
+        if (i < 10) {
+            // chart.data.labels.push(0);
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data[i] = newValue;
+            });
+        } else {
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.shift();
+                dataset.data.push(newValue);
+            });
+        }
+        i++;
+
         chart.update();
     }
 
     var data = {
-        labels: [],
+        labels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
         datasets: [
             {
                 label: 'Dataset',
-                data: [],
-                borderColor: "#00FF00",
-                backgroundColor: "#00FFFF"
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fill: true,
+                backgroundColor: "rgba(251,129,34,0.2)",
+                borderColor: "rgba(251, 129, 34, 1)"
             }
         ]
     };
@@ -39,16 +52,29 @@
                     display: false
                 },
                 title: {
-                    display: true,
-                    text: 'Temperature'
+                    display: false
                 }
             },
             scales: {
+                x: {
+                    grid: {
+                        color: "#00000000"
+                    },
+                    ticks: {
+                        color: "#00000000"
+                    }
+                },
                 y: {
                     min: minValue,
-                    max: maxValue
+                    max: maxValue,
+                    grid: {
+                        color: "#EEEEEE33"
+                    },
+                    ticks: {
+                        color: "#EEEEEE"
+                    }
                 }
-            }
+            },
         }
     };
 
