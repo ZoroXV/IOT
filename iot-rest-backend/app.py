@@ -8,8 +8,14 @@ from flask import jsonify,request
 import requests
 import random
 
-app = Flask(__name__)
+def init_function():
+    print("ok")
 
+def create_app():
+    init_function()
+    return Flask(__name__)
+
+app = create_app()
 
 # Infrastructure
 def get_stats_from_esp32():
@@ -48,3 +54,6 @@ def post_led():
     turn_on_led()
     # turn_on_led_test()
     return ""
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
