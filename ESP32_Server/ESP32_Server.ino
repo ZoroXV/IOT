@@ -55,19 +55,22 @@ void setup(void) {
 	}
 
 	server.on("/", []() {
-			server.send(404, "text/plain", "Invalid URI");
+			Serial.println("Root Request");
+			server.send(200, "text/plain", "Hello from ESP32 !");
 			});
 
 	server.on("/led", []() {
+			Serial.println("LED Request");
 			is_led_on = !is_led_on;
 			if (is_led_on)
 			digitalWrite(led, 1);
 			else
 			digitalWrite(led, 0);
-			server.send(200, "text/plain", "this works as well");
+			server.send(200, "text/plain", "Toggle ESP32's Led");
 			});
 
 	server.on("/temp", []() {
+			Serial.println("Temp Request");
 			server.send(200, "text/json", "{\"temperature\":"
 					+ String(dht.readTemperature())
 					+ ",\"humidity\":"
