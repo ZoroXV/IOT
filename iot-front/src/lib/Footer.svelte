@@ -1,6 +1,6 @@
 <div class="footer">
 <h2>
-    Made by Jean Sainctavit and Victor Le-Corre
+    Made by Jean Sainctavit and Victor Le Corre
 </h2>
 </div>
 

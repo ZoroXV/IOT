@@ -27,7 +27,7 @@
 
           childGraph.updateValue(res.humidity);
           childDoughnut.updateValue(res.humidity);
-          await sleep(2000);
+          await sleep(4000);
       }
     }
 

@@ -6,7 +6,7 @@ To create the associated docker image:
 
 ```bash
 docker build . -t iot-front
-docker run iot-front:latest
+docker run -p 3000:3000 iot-front:latest
 ```
 
 ## Developing

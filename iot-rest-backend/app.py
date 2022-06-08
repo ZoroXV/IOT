@@ -10,10 +10,10 @@ import random
 
 app = Flask(__name__)
 
-# Infrastructure
 
+# Infrastructure
 def get_stats_from_esp32():
-    r = requests.get("http://172.20.10.9/temp")
+    r = requests.get("http://192.168.20.2/temp")
     j = r.json()
     return (j["temperature"], j["humidity"])
 
@@ -26,13 +26,14 @@ def turn_on_led_test():
     print("Turn on led")
 
 def turn_on_led():
-    requests.get("http://172.20.10.9/led")
+    requests.get("http://192.168.20.2/led")
+
 
 # Endpoints
 @app.route("/", methods=['GET'])
 def get_stats():
-    # temperature, humidity = get_stats_from_esp32()
-    temperature, humidity = get_random_stats()
+    temperature, humidity = get_stats_from_esp32()
+    #temperature, humidity = get_random_stats()
 
     data = {
         "temperature": temperature,
@@ -44,5 +45,6 @@ def get_stats():
 
 @app.route("/", methods=['POST'])
 def post_led():
-    turn_on_led_test()
+    turn_on_led()
+    # turn_on_led_test()
     return ""

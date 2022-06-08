@@ -28,7 +28,7 @@
           childGraph.updateValue(res.temperature);
           curTemp = Math.floor(res.temperature);
 
-          await sleep(2000);
+          await sleep(4000);
       }
     }
 
