@@ -1,17 +1,21 @@
 #include <WiFi.h>
 #include <WiFiClient.h>
+#include <WireGuard-ESP32.h>
 #include <WebServer.h>
 #include <ESPmDNS.h>
 #include "DHT.h"
 
-const char* ssid = "Viens on Ken";
-const char* password = "victor-wifi";
+const char* ssid = "Fairphone";
+const char* password = "SunnyBeach";
 
+static WireGuard wg;
 WebServer server(80);
 DHT dht(19, DHT11);
 
 const int led = LED_BUILTIN;
 bool is_led_on = false;
+
+IPAddress local_ip(192, 168, 20, 2);
 
 void handleNotFound() {
 	digitalWrite(led, 1);
@@ -49,6 +53,16 @@ void setup(void) {
 	Serial.println(ssid);
 	Serial.print("IP address: ");
 	Serial.println(WiFi.localIP());
+
+	configTime(9 * 60 * 60, 0, "0.fr.pool.ntp.org", "1.fr.pool.ntp.org", "time.google.com");
+
+	wg.begin(
+			local_ip,
+			"gIuwaFK/moWr0aKxa4Qyqp9dgTiPezpAl5LWw2VeNmw=",
+			"192.168.43.150",
+			"k4RCgqHnSCxMoDTzjtbBGSUkpBALKVGAgptQkbwwDHM=",
+			51820
+			);
 
 	if (MDNS.begin("esp32")) {
 		Serial.println("MDNS responder started");
