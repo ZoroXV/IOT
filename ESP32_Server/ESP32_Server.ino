@@ -5,8 +5,8 @@
 #include <ESPmDNS.h>
 #include "DHT.h"
 
-const char* ssid = "Fairphone";
-const char* password = "SunnyBeach";
+const char* ssid = "ssid";
+const char* password = "pwd";
 
 static WireGuard wg;
 WebServer server(80);
