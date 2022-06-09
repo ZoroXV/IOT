@@ -97,7 +97,7 @@ void loop() {
 	client.loop();
 
 	long now = millis();
-	if (now - lastMsg > 5000) {
+	if (now - lastMsg > 10000) {
 		lastMsg = now;
 
 		temperature = dht.readTemperature();
@@ -112,6 +112,6 @@ void loop() {
 		dtostrf(humidity, 1, 2, humString);
 		Serial.print("Humidity: ");
 		Serial.println(humString);
-		client.publish("esp32/temp", humString);
+		client.publish("esp32/humidity", humString);
 	}
 }
